@@ -10,21 +10,24 @@ int main()
 	std::vector<sf::RectangleShape> bricks = generateBricks();
 
 	//platform thing
-	sf::RectangleShape platform({ 100.f, 20.f });
-	platform.setPosition(sf::Vector2f({ window.getSize().x / 2 - 50.f , window.getSize().y - 40.f }));
-	float platformSpeedMultiplier = 1;
+	Platform platform;
+	platform.setToStartPosition(window);
 
 	//ball(s)
 	std::vector<Ball> balls;
 	Ball ball;
 	balls.push_back(ball);
-	balls.at(0).setStartPosition(window);
+	for (int i = 0; i < balls.size(); ++i) {
+		balls.at(i).setStartPosition(window);
+	}
+	//balls.at(0).setStartPosition(window);
 	//sf::CircleShape ball(10.f);
 	//ball.setPosition(sf::Vector2f({ window.getSize().x / 2 - 10.f, window.getSize().y / 2 - 0.f}));
 
 	//upgrades
 	std::vector<Upgrade> upgrades;
 	Upgrade upgrade;
+	upgrade.setBasePosition(40.f, window.getSize().y - 40.f);
 	upgrades.push_back(upgrade);
 
 	while ( window.isOpen() )
@@ -40,34 +43,30 @@ int main()
 		{
 			window.draw(bricks.at(i));
 		}
+		/*window.draw(upgrades.at(0).getUpgrade());
+		upgrades.at(0).setupgradeType("tripleBall");
+		upgrades.at(0).setActive(1);
+		upgrades.at(0).makeAction(balls);*/
 
-		//platform move
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-		{
-			if (platform.getPosition().x + 105.f < window.getSize().x)
-			{
-				platform.move(sf::Vector2f({ 7.f * platformSpeedMultiplier, 0.f }));
-			}
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-		{
-			if (platform.getPosition().x - 5.f > 0.f)
-			{
-				platform.move(sf::Vector2f({ -7.f * platformSpeedMultiplier, 0.f }));
-			}
-		}
-
-		for (int i = 0; i < balls.size(); ++i) {
-			balls.at(i).collisionCheck(&window, &platform, bricks, &platformSpeedMultiplier);
-		}
-
-		window.draw(platform);
+		//balls move
 		for (int i = 0; i < balls.size(); ++i) {
 			balls.at(i).baseMove();
 		}
+		//platform move
+		platform.movePlatform(window);
+
+		//balls collision check
+		for (int i = 0; i < balls.size(); ++i) {
+			balls.at(i).collisionCheck(window, &platform, bricks);
+		}
+
+		//drawing platform and balls
+		window.draw(platform.getPlatformBody());
 		for (int i = 0; i < balls.size(); ++i) {
 			window.draw(balls.at(i).getBall());
 		}
+
+		//display
 		window.display();
 	}
 }

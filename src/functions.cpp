@@ -45,9 +45,9 @@ void Ball::setStartPosition(const sf::RenderWindow& window)
 	this->ball.setPosition(sf::Vector2f({ window.getSize().x / 2 - 10.f, window.getSize().y / 2 - 0.f }));
 }
 
-void Ball::collisionCheck(sf::RenderWindow* window, sf::RectangleShape* platform, std::vector<sf::RectangleShape>& bricks, float* platformSpeedMultiplier)
+void Ball::collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<sf::RectangleShape>& bricks)
 {
-	if ((this->ball).getGlobalBounds().findIntersection((*platform).getGlobalBounds())) {
+	if ((this->ball).getGlobalBounds().findIntersection(platform->getPlatformBody().getGlobalBounds())) {
 		(this->moveDirectionY) = -3.f * (this->speedMultiplier);
 		(this->moveDirectionX) = -1 + rand() % 3 * (this->speedMultiplier);
 	}
@@ -60,11 +60,11 @@ void Ball::collisionCheck(sf::RenderWindow* window, sf::RectangleShape* platform
 			if ((this->speedMultiplier) < 3)
 			{
 				(this->speedMultiplier) += 0.05;
-				(*platformSpeedMultiplier) += 0.025;
+				platform->addToSpeedMultiplier(0.025);
 			}
 		}
 	}
-	if ((this->ball).getPosition().x + 15.f > (*window).getSize().x)
+	if ((this->ball).getPosition().x + 15.f > window.getSize().x)
 	{
 		(this->ball).setPosition(sf::Vector2f({ (this->ball).getPosition().x - 1.f, (this->ball).getPosition().y }));
 		(this->moveDirectionX) = -1 - rand() % 2 * (this->speedMultiplier);
@@ -79,12 +79,12 @@ void Ball::collisionCheck(sf::RenderWindow* window, sf::RectangleShape* platform
 		(this->moveDirectionY) = 3.f * (this->speedMultiplier);
 		(this->moveDirectionX) = -1 + rand() % 3 * (this->speedMultiplier);
 	}
-	if ((this->ball).getPosition().y > (*window).getSize().y)
+	if ((this->ball).getPosition().y > window.getSize().y)
 	{
 		(this->ball).setPosition(sf::Vector2f({ 480.f, 300.f }));
-		(*platform).setPosition(sf::Vector2f({ (*window).getSize().x / 2 - 50.f , (*window).getSize().y - 40.f }));
+		platform->setToStartPosition(window);
 		(this->speedMultiplier) = 1;
-		(*platformSpeedMultiplier) = 1;
+		platform->setToStartSpeedMultiplier();
 		(this->moveDirectionY) = 3.f;
 		(this->moveDirectionX) = 0.f;
 		//window.close();
@@ -99,4 +99,34 @@ void Upgrade::baseMove()
 void Upgrade::setBasePosition(float posX, float posY)
 {
 	this->upgradeBody.setPosition(sf::Vector2f({ posX - 0.f, posY - 0.f}));
+}
+
+void Upgrade::makeAction(std::vector<Ball> &balls)
+{
+	if (this->upgradeType == "tripleBall")
+	{
+		Ball newball;
+		for (int i = 0; i < 2; ++i)
+		{
+			balls.push_back(newball);
+		}
+	}
+}
+
+void Platform::movePlatform(const sf::RenderWindow& window)
+{
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+	{
+		if (this->platformBody.getPosition().x + 105.f < window.getSize().x)
+		{
+			this->platformBody.move(sf::Vector2f({ 7.f * this->speedMultiplier, 0.f }));
+		}
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+	{
+		if (this->platformBody.getPosition().x - 5.f > 0.f)
+		{
+			this->platformBody.move(sf::Vector2f({ -7.f * this->speedMultiplier, 0.f }));
+		}
+	}
 }

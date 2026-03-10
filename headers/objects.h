@@ -4,6 +4,43 @@
 
 std::vector<sf::RectangleShape> generateBricks();
 
+class Platform {
+private:
+	sf::RectangleShape platformBody;
+	float speedMultiplier;
+public:
+	Platform() : platformBody(sf::Vector2f({ 100.f, 20.f })) {
+		this->speedMultiplier = 1;
+	}
+
+	sf::RectangleShape getPlatformBody()
+	{
+		return this->platformBody;
+	}
+
+	float getSpeedMultiplier()
+	{
+		return this->speedMultiplier;
+	}
+
+	void setToStartPosition(const sf::RenderWindow& window)
+	{
+		this->platformBody.setPosition(sf::Vector2f({ window.getSize().x / 2 - 50.f , window.getSize().y - 40.f }));
+	}
+
+	void setToStartSpeedMultiplier()
+	{
+		this->speedMultiplier = 1;
+	}
+
+	void addToSpeedMultiplier(float multiplier)
+	{
+		this->speedMultiplier += multiplier;
+	}
+
+	void movePlatform(const sf::RenderWindow& window);
+};
+
 class Ball {
 private:
 	sf::CircleShape ball;
@@ -41,7 +78,7 @@ public:
 
 	void setStartPosition(const sf::RenderWindow& window);
 
-	void collisionCheck(sf::RenderWindow* window, sf::RectangleShape* platform, std::vector<sf::RectangleShape>& bricks, float* platformSpeedMultiplier);
+	void collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<sf::RectangleShape>& bricks);
 };
 
 class Upgrade {
@@ -67,7 +104,14 @@ public:
 		this->active = activeCode;
 	}
 
+	void setupgradeType(std::string type)
+	{
+		this->upgradeType = type;
+	}
+
 	void baseMove();
 
 	void setBasePosition(float posX, float posY);
+
+	void makeAction(std::vector<Ball>& balls);
 };
