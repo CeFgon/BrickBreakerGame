@@ -18,9 +18,14 @@ int main()
 	std::vector<Ball> balls;
 	Ball ball;
 	balls.push_back(ball);
-	balls.at(0).setBallStartPosition(window);
+	balls.at(0).setStartPosition(window);
 	//sf::CircleShape ball(10.f);
 	//ball.setPosition(sf::Vector2f({ window.getSize().x / 2 - 10.f, window.getSize().y / 2 - 0.f}));
+
+	//upgrades
+	std::vector<Upgrade> upgrades;
+	Upgrade upgrade;
+	upgrades.push_back(upgrade);
 
 	while ( window.isOpen() )
 	{
@@ -53,12 +58,12 @@ int main()
 		}
 
 		for (int i = 0; i < balls.size(); ++i) {
-			balls.at(i).ballCollisionCheck(&window, &platform, bricks, &platformSpeedMultiplier);
+			balls.at(i).collisionCheck(&window, &platform, bricks, &platformSpeedMultiplier);
 		}
 
 		window.draw(platform);
 		for (int i = 0; i < balls.size(); ++i) {
-			balls.at(i).ballBaseMove();
+			balls.at(i).baseMove();
 		}
 		for (int i = 0; i < balls.size(); ++i) {
 			window.draw(balls.at(i).getBall());
