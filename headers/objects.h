@@ -87,7 +87,9 @@ private:
 	std::string upgradeType;
 	int active = 0;
 public:
-	Upgrade() : upgradeBody(sf::Vector2f({ 20.f, 10.f })) {}
+	Upgrade() : upgradeBody(sf::Vector2f({ 30.f, 20.f })) {
+		upgradeBody.setFillColor(sf::Color::Yellow);
+	}
 
 	sf::RectangleShape getUpgrade()
 	{

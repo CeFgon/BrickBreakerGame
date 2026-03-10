@@ -10,13 +10,6 @@ std::vector<sf::RectangleShape> generateBricks()
 		for (int i = 0; i <= 9; ++i)
 		{
 			rectangle.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
-			/*if (i % 2 == 0)
-			{
-				rectangle.setFillColor(sf::Color::Red);
-			}
-			else {
-				rectangle.setFillColor(sf::Color::Green);
-			}*/
 			if (i == 0)
 			{
 				rectangle.setPosition(sf::Vector2f({ nextBrickPositionX, nextBrickPositionY }));

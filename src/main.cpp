@@ -20,9 +20,6 @@ int main()
 	for (int i = 0; i < balls.size(); ++i) {
 		balls.at(i).setStartPosition(window);
 	}
-	//balls.at(0).setStartPosition(window);
-	//sf::CircleShape ball(10.f);
-	//ball.setPosition(sf::Vector2f({ window.getSize().x / 2 - 10.f, window.getSize().y / 2 - 0.f}));
 
 	//upgrades
 	std::vector<Upgrade> upgrades;
@@ -43,10 +40,11 @@ int main()
 		{
 			window.draw(bricks.at(i));
 		}
-		/*window.draw(upgrades.at(0).getUpgrade());
+
+		window.draw(upgrades.at(0).getUpgrade());
 		upgrades.at(0).setupgradeType("tripleBall");
 		upgrades.at(0).setActive(1);
-		upgrades.at(0).makeAction(balls);*/
+		upgrades.at(0).makeAction(balls);
 
 		//balls move
 		for (int i = 0; i < balls.size(); ++i) {
