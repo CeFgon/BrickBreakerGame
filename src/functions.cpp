@@ -1,31 +1,52 @@
 #include "../headers/objects.h"
-
-std::vector<sf::RectangleShape> generateBricks()
+/*
+void generateBricks(std::vector<Brick>& bricks)
 {
-	std::vector<sf::RectangleShape> bricks;
-	sf::RectangleShape rectangle({ 100.f, 20.f });
-	float nextBrickPositionX = 0.f, nextBrickPositionY = 0.f;
+	Brick newBrick;
 	for (int j = 0; j < 9; ++j)
 	{
 		for (int i = 0; i <= 9; ++i)
 		{
-			rectangle.setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
+			newBrick.getBrickBody().setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
+			std::cout << newBrick.getBrickBody().getFillColor().toInteger() << std::endl;
 			if (i == 0)
 			{
-				rectangle.setPosition(sf::Vector2f({ nextBrickPositionX, nextBrickPositionY }));
-				bricks.push_back(sf::RectangleShape(rectangle));
-				nextBrickPositionX += 110.f;
+				newBrick.getBrickBody().setPosition(sf::Vector2f({ 0.f, 0.f + (j * 30.f) }));
+				bricks.push_back(newBrick);
 			}
 			else {
-				rectangle.setPosition(sf::Vector2f({ nextBrickPositionX, nextBrickPositionY }));
-				bricks.push_back(sf::RectangleShape(rectangle));
-				nextBrickPositionX += 110.f;
+				newBrick.getBrickBody().setPosition(sf::Vector2f({ bricks.at(bricks.size() - 1).getBrickBody().getPosition().x + 110.f, bricks.at(bricks.size() - 1).getBrickBody().getPosition().y + (j * 30.f)}));
+				bricks.push_back(newBrick);
+				std::cout << newBrick.getBrickBody().getPosition().x << " " << newBrick.getBrickBody().getPosition().y << std::endl;
 			}
 		}
-		nextBrickPositionX = 0.f;
-		nextBrickPositionY += 30.f;
 	}
-	return bricks;
+}
+*/
+void generateBricks(std::vector<Brick>& bricks)
+{
+	for (int j = 0; j < 9; ++j)
+	{
+		for (int i = 0; i <= 9; ++i)
+		{
+			Brick newBrick;
+
+			newBrick.getBrickBody().setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
+			std::cout << newBrick.getBrickBody().getFillColor().toInteger() << std::endl;
+			/*if (i == 0)
+			{
+				newBrick.getBrickBody().setPosition(sf::Vector2f({ 0.f, 0.f + (j * 30.f) }));
+				bricks.push_back(newBrick);
+			}
+			else {*/
+			float xPos = i * 110.f;
+			float yPos = j * 30.f;
+			newBrick.getBrickBody().setPosition(sf::Vector2f(xPos, yPos));
+				bricks.push_back(newBrick);
+				std::cout << newBrick.getBrickBody().getPosition().x << " " << newBrick.getBrickBody().getPosition().y << std::endl;
+			//}
+		}
+	}
 }
 
 void Ball::baseMove()
@@ -38,7 +59,7 @@ void Ball::setStartPosition(const sf::RenderWindow& window)
 	this->ball.setPosition(sf::Vector2f({ window.getSize().x / 2 - 10.f, window.getSize().y / 2 - 0.f }));
 }
 
-void Ball::collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<sf::RectangleShape>& bricks)
+void Ball::collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<Brick>& bricks)
 {
 	if ((this->ball).getGlobalBounds().findIntersection(platform->getPlatformBody().getGlobalBounds())) {
 		(this->moveDirectionY) = -3.f * (this->speedMultiplier);
@@ -46,7 +67,7 @@ void Ball::collisionCheck(const sf::RenderWindow& window, Platform* platform, st
 	}
 	for (int i = 0; i < bricks.size(); ++i)
 	{
-		if ((this->ball).getGlobalBounds().findIntersection(bricks.at(i).getGlobalBounds())) {
+		if ((this->ball).getGlobalBounds().findIntersection(bricks.at(i).getBrickBody().getGlobalBounds())) {
 			(this->moveDirectionY) = 3.f * (this->speedMultiplier);
 			(this->moveDirectionX) = -1 + rand() % 3 * (this->speedMultiplier);
 			bricks.erase(bricks.begin() + i);

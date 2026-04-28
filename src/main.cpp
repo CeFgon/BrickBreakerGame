@@ -7,7 +7,8 @@ int main()
 	window.setFramerateLimit(60);
 
 	//bricks
-	std::vector<sf::RectangleShape> bricks = generateBricks();
+	std::vector<Brick> bricks;
+	generateBricks(bricks);
 
 	//platform thing
 	Platform platform;
@@ -38,18 +39,20 @@ int main()
 		window.clear();
 		for (int i = 0; i < bricks.size(); ++i)
 		{
-			window.draw(bricks.at(i));
+			window.draw(bricks.at(i).getBrickBody());
 		}
-
+		/*
 		window.draw(upgrades.at(0).getUpgrade());
 		upgrades.at(0).setupgradeType("tripleBall");
 		upgrades.at(0).setActive(1);
 		upgrades.at(0).makeAction(balls);
+		*/
 
 		//balls move
 		for (int i = 0; i < balls.size(); ++i) {
 			balls.at(i).baseMove();
 		}
+
 		//platform move
 		platform.movePlatform(window);
 
@@ -63,6 +66,16 @@ int main()
 		for (int i = 0; i < balls.size(); ++i) {
 			window.draw(balls.at(i).getBall());
 		}
+
+		/*
+		sf::RectangleShape randomRect(sf::Vector2f({ 100.f, 30.f}));
+		randomRect.setFillColor(sf::Color::Red);
+		for (int i = 1; i < 9; i++)
+		{
+			randomRect.setPosition(sf::Vector2f({ 0.f, 0.f + (i * 30.f) }));
+		}
+		window.draw(randomRect);
+		*/
 
 		//display
 		window.display();

@@ -1,8 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <iostream>
 
-std::vector<sf::RectangleShape> generateBricks();
+class Ball;
 
 class Platform {
 private:
@@ -18,7 +19,7 @@ public:
 		return this->platformBody;
 	}
 
-	float getSpeedMultiplier()
+	float getSpeedMultiplier() const
 	{
 		return this->speedMultiplier;
 	}
@@ -41,6 +42,69 @@ public:
 	void movePlatform(const sf::RenderWindow& window);
 };
 
+class Upgrade {
+private:
+	sf::RectangleShape upgradeBody;
+	std::string upgradeType;
+	int isActive = 0;
+public:
+	Upgrade() : upgradeBody(sf::Vector2f({ 30.f, 20.f })) {
+		upgradeBody.setFillColor(sf::Color::Yellow);
+	}
+
+	sf::RectangleShape getUpgrade()
+	{
+		return this->upgradeBody;
+	}
+
+	std::string getUpgradeType()
+	{
+		return this->upgradeType;
+	}
+
+	float getStatus() const
+	{
+		return this->isActive;
+	}
+
+	void setActive(const int activeCode)
+	{
+		this->isActive = activeCode;
+	}
+
+	void setupgradeType(std::string type)
+	{
+		this->upgradeType = type;
+	}
+
+	void baseMove();
+
+	void setBasePosition(float posX, float posY);
+
+	void makeAction(std::vector<Ball>& balls);
+};
+
+class Brick {
+private:
+	sf::RectangleShape brickBody;
+	Upgrade upgrade;
+
+public:
+	Brick() : brickBody(sf::Vector2f({ 100.f, 20.f }))
+	{
+	}
+
+	sf::RectangleShape getBrickBody()
+	{
+		return this->brickBody;
+	}
+
+	Upgrade getBrickUpgrade()
+	{
+		return this->upgrade;
+	}
+};
+
 class Ball {
 private:
 	sf::CircleShape ball;
@@ -59,17 +123,17 @@ public:
 		return ball;
 	}
 
-	float getMoveDirectionX()
+	float getMoveDirectionX() const
 	{
 		return this->moveDirectionX;
 	}
 
-	float getMoveDirectionY()
+	float getMoveDirectionY() const
 	{
 		return this->moveDirectionY;
 	}
 
-	float getSpeedMultiplier()
+	float getSpeedMultiplier() const
 	{
 		return this->speedMultiplier;
 	}
@@ -78,42 +142,7 @@ public:
 
 	void setStartPosition(const sf::RenderWindow& window);
 
-	void collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<sf::RectangleShape>& bricks);
+	void collisionCheck(const sf::RenderWindow& window, Platform* platform, std::vector<Brick>& bricks);
 };
 
-class Upgrade {
-private:
-	sf::RectangleShape upgradeBody;
-	std::string upgradeType;
-	int active = 0;
-public:
-	Upgrade() : upgradeBody(sf::Vector2f({ 30.f, 20.f })) {
-		upgradeBody.setFillColor(sf::Color::Yellow);
-	}
-
-	sf::RectangleShape getUpgrade()
-	{
-		return this->upgradeBody;
-	}
-
-	std::string getUpgradeType()
-	{
-		return this->upgradeType;
-	}
-
-	void setActive(const int activeCode)
-	{
-		this->active = activeCode;
-	}
-
-	void setupgradeType(std::string type)
-	{
-		this->upgradeType = type;
-	}
-
-	void baseMove();
-
-	void setBasePosition(float posX, float posY);
-
-	void makeAction(std::vector<Ball>& balls);
-};
+void generateBricks(std::vector<Brick>& bricks);
