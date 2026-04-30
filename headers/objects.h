@@ -94,7 +94,7 @@ public:
 	{
 	}
 
-	sf::RectangleShape getBrickBody()
+	sf::RectangleShape& getBrickBody()
 	{
 		return this->brickBody;
 	}

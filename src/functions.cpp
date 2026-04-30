@@ -1,28 +1,5 @@
 #include "../headers/objects.h"
-/*
-void generateBricks(std::vector<Brick>& bricks)
-{
-	Brick newBrick;
-	for (int j = 0; j < 9; ++j)
-	{
-		for (int i = 0; i <= 9; ++i)
-		{
-			newBrick.getBrickBody().setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
-			std::cout << newBrick.getBrickBody().getFillColor().toInteger() << std::endl;
-			if (i == 0)
-			{
-				newBrick.getBrickBody().setPosition(sf::Vector2f({ 0.f, 0.f + (j * 30.f) }));
-				bricks.push_back(newBrick);
-			}
-			else {
-				newBrick.getBrickBody().setPosition(sf::Vector2f({ bricks.at(bricks.size() - 1).getBrickBody().getPosition().x + 110.f, bricks.at(bricks.size() - 1).getBrickBody().getPosition().y + (j * 30.f)}));
-				bricks.push_back(newBrick);
-				std::cout << newBrick.getBrickBody().getPosition().x << " " << newBrick.getBrickBody().getPosition().y << std::endl;
-			}
-		}
-	}
-}
-*/
+
 void generateBricks(std::vector<Brick>& bricks)
 {
 	for (int j = 0; j < 9; ++j)
@@ -32,19 +9,10 @@ void generateBricks(std::vector<Brick>& bricks)
 			Brick newBrick;
 
 			newBrick.getBrickBody().setFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256));
-			std::cout << newBrick.getBrickBody().getFillColor().toInteger() << std::endl;
-			/*if (i == 0)
-			{
-				newBrick.getBrickBody().setPosition(sf::Vector2f({ 0.f, 0.f + (j * 30.f) }));
-				bricks.push_back(newBrick);
-			}
-			else {*/
 			float xPos = i * 110.f;
 			float yPos = j * 30.f;
 			newBrick.getBrickBody().setPosition(sf::Vector2f(xPos, yPos));
-				bricks.push_back(newBrick);
-				std::cout << newBrick.getBrickBody().getPosition().x << " " << newBrick.getBrickBody().getPosition().y << std::endl;
-			//}
+			bricks.push_back(newBrick);
 		}
 	}
 }
@@ -63,13 +31,13 @@ void Ball::collisionCheck(const sf::RenderWindow& window, Platform* platform, st
 {
 	if ((this->ball).getGlobalBounds().findIntersection(platform->getPlatformBody().getGlobalBounds())) {
 		(this->moveDirectionY) = -3.f * (this->speedMultiplier);
-		(this->moveDirectionX) = -1 + rand() % 3 * (this->speedMultiplier);
+		(this->moveDirectionX) = -1.f + rand() % 3 * (this->speedMultiplier);
 	}
 	for (int i = 0; i < bricks.size(); ++i)
 	{
 		if ((this->ball).getGlobalBounds().findIntersection(bricks.at(i).getBrickBody().getGlobalBounds())) {
 			(this->moveDirectionY) = 3.f * (this->speedMultiplier);
-			(this->moveDirectionX) = -1 + rand() % 3 * (this->speedMultiplier);
+			(this->moveDirectionX) = -1.f + rand() % 3 * (this->speedMultiplier);
 			bricks.erase(bricks.begin() + i);
 			if ((this->speedMultiplier) < 3)
 			{
